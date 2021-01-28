@@ -1,0 +1,73 @@
+python: can't open file '/root/library_booksearch_web.py': [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "library_booksearch_web.py", line 171, in <module>
+    searchBooks('软件工程')
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 167, in mainFunc
+    handle_client(server_socket, client_socket, mainHtml)
+  File "library_booksearch_web.py", line 115, in handle_client
+    searchBooks('软件工程')
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 167, in mainFunc
+    handle_client(server_socket, client_socket, mainHtml)
+  File "library_booksearch_web.py", line 115, in handle_client
+    searchBooks('软件工程')
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 167, in mainFunc
+    handle_client(server_socket, client_socket, mainHtml)
+  File "library_booksearch_web.py", line 115, in handle_client
+    searchBooks('软件工程')
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 167, in mainFunc
+    handle_client(server_socket, client_socket, mainHtml)
+  File "library_booksearch_web.py", line 115, in handle_client
+    searchBooks('软件工程')
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 167, in mainFunc
+    handle_client(server_socket, client_socket, mainHtml)
+  File "library_booksearch_web.py", line 134, in handle_client
+    if(mainPage.group(1) == '/'):
+AttributeError: 'NoneType' object has no attribute 'group'
+Traceback (most recent call last):
+  File "library_booksearch_web.py", line 171, in <module>
+    searchBooks('软件工程')
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 167, in mainFunc
+    handle_client(server_socket, client_socket, mainHtml)
+  File "library_booksearch_web.py", line 108, in handle_client
+    recv_data = client_socket.recv(1024).decode("utf-8")  # 1024表示本次接收的最大字节数
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe0 in position 5: invalid continuation byte
+Traceback (most recent call last):
+  File "library_booksearch_web.py", line 173, in <module>
+    searchBooks('软件工程')
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 153, in mainFunc
+    if(server_socket):
+UnboundLocalError: local variable 'server_socket' referenced before assignment
+Traceback (most recent call last):
+  File "library_booksearch_web.py", line 171, in <module>
+    
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 167, in mainFunc
+    # server_socket就可以省下来专门等待其他新的客户端连接while True:
+  File "library_booksearch_web.py", line 108, in handle_client
+    recv_data = client_socket.recv(1024).decode("utf-8")  # 1024表示本次接收的最大字节数
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe0 in position 5: invalid continuation byte
+Traceback (most recent call last):
+  File "library_booksearch_web.py", line 177, in <module>
+    searchBooks('软件工程')
+  File "library_booksearch_web.py", line 17, in searchBooks
+    mainFunc(mainPage)
+  File "library_booksearch_web.py", line 173, in mainFunc
+    handle_client(server_socket, client_socket, mainHtml)
+  File "library_booksearch_web.py", line 134, in handle_client
+    if(mainPage.group(1) == '/'):
+AttributeError: 'NoneType' object has no attribute 'group'
