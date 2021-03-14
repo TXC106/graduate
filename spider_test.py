@@ -18,6 +18,7 @@ from library_reserve import getReserved
 # from library_booksearch import searchBooks
 from library_booksearch_web import searchBooks
 from flask_apscheduler import APScheduler
+from jobsearch import getJobInfo
 import time
 
 pic_dict = {}
@@ -167,6 +168,10 @@ def LibRecord():
     username = request.values.get('username', 0)
     psw = request.values.get('password', 0)
     return jsonify(getBorrowRecord(username, psw))
+
+@app.route('/jobsearch', methods=['get'])
+def JobSearch():
+    return jsonify(getJobInfo())
 
 
 # @app.route('/avg_score', methods=['post'])
