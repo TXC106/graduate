@@ -13,6 +13,7 @@ import time
 
 # 关闭多余的链接
 s = requests.session()
+# 关闭多余连接
 s.keep_alive = False
 # 增加重试连接次数
 requests.adapters.DEFAULT_RETRIES = 5
@@ -26,7 +27,10 @@ def getJobInfo():
         random.randrange(1, 200, 20), random.randrange(1, 200, 20), random.randrange(1, 200, 20),
         random.randrange(1, 200, 20))
     try:
-        resp = requests.get(url_Announce, headers=headers)
+        # http连接数量控制
+        s.headers = headers
+        resp = s.get(url_Announce)
+        # resp = requests.get(url_Announce, headers=headers)
         resp.encoding = 'utf-8'
 
         # print(resp.text)
@@ -75,7 +79,12 @@ def getJobInfo():
         headers["X-Forwarded-For"] = "%s.%s.%s.%s" % (
             random.randrange(1, 200, 20), random.randrange(1, 200, 20), random.randrange(1, 200, 20),
             random.randrange(1, 200, 20))
-        resp = requests.get(url_Announce, headers=headers)
+
+        # http连接数量控制
+        s.headers = headers
+        resp = s.get(url_Announce)
+        # resp = requests.get(url_Announce, headers=headers)
+
         # resp.encoding = 'gbk'
         resp.encoding = resp.apparent_encoding
 
@@ -145,7 +154,12 @@ def getJobInfo():
 
             # 获得详情界面信息
             # print('==================detail========================')
-            resp_detail = requests.get(result_urls_text, headers=headers)
+
+            # http连接数量控制
+            s.headers = headers
+            resp_detail = s.get(result_urls_text)
+            #  = requests.get(result_urls_text, headers=headers)
+
             # resp_detail.encoding = 'gbk'
             resp_detail.encoding = resp_detail.apparent_encoding
             # print(resp_detail.text)
@@ -223,8 +237,9 @@ def getJobInfo():
 
             job_info_list.append(job_info_dict)
             # print('=============================')
+            print('write')
             time.sleep(0.1)
-            resp_detail.close()
+            # resp_detail.close()
 
 
         # for li in soup.find(name='ul', attrs={'class': 'lict_cont1 clearfix'}).findAll('li'):
@@ -240,9 +255,11 @@ def getJobInfo():
         print(page_num)
         print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         page_num += 1
-        time.sleep(0.1)
-        resp.close()
-        print('write')
+        print("sleeping...")
+        time.sleep(5)
+        print("go on")
+        # resp.close()
+        # print('write')
 
     # exit()
     # print(announce_sum)
