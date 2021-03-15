@@ -18,7 +18,22 @@ s.keep_alive = False
 # 增加重试连接次数
 requests.adapters.DEFAULT_RETRIES = 5
 
+proxies_list = ['113.194.30.162:9999', '122.224.65.197:3128', '110.243.19.138:9999',
+                '49.67.55.216:8118', '175.43.56.13:9999']
+proxy_num = 0
+
+
+def getProxy(num=0):
+    proxies = {
+        'http': '118.24.88.66:1080',
+        'https': proxies_list[num]
+    }
+    return proxies
+
+
 def getJobInfo():
+    global proxy_num
+    print(proxy_num)
     url_Announce = 'https://search.51job.com/list/090200,000000,0000,00,9,99,%25E8%25AE%25A1%25E7%25AE%2597%25E6%259C%25BA,2,1.html'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36'
@@ -29,6 +44,9 @@ def getJobInfo():
     try:
         # http连接数量控制
         s.headers = headers
+        # s.proxies = getProxy(proxy_num)
+        print("the current proxy is")
+        print(s.proxies)
         resp = s.get(url_Announce)
         # resp = requests.get(url_Announce, headers=headers)
         resp.encoding = 'utf-8'
@@ -80,13 +98,32 @@ def getJobInfo():
             random.randrange(1, 200, 20), random.randrange(1, 200, 20), random.randrange(1, 200, 20),
             random.randrange(1, 200, 20))
 
-        # http连接数量控制
-        s.headers = headers
-        resp = s.get(url_Announce)
-        # resp = requests.get(url_Announce, headers=headers)
+        try:
+            # http连接数量控制
+            s.headers = headers
+            # 换代理
+            proxy_num = proxy_num
+            s.proxies = getProxy(proxy_num % 5)
+            print("the current proxy ip is")
+            print(s.proxies)
+            resp = s.get(url_Announce)
+            # resp = requests.get(url_Announce, headers=headers)
+            # print(resp.status_code)
+        except:
+            s.headers = headers
+            print("cannot get access to it")
+            time.sleep(5)
+            # 换代理
+            proxy_num = proxy_num+1
+            s.proxies = getProxy(proxy_num%5)
+            print("the current proxy ip is")
+            print(s.proxies)
+            resp = s.get(url_Announce)
+            # print(resp.status_code)
 
         # resp.encoding = 'gbk'
         resp.encoding = resp.apparent_encoding
+
 
         # 获得总结果
         result = re.findall('engine_search_result\":\[(.*?),\"adid\":\"\"}\],', resp.text, re.I)[0]
@@ -124,6 +161,8 @@ def getJobInfo():
                 result_attribute_text = re.findall('"attribute_text":(.*?),"companysize_text"', result_full_now, re.I)[0]
                 # print('result_providesalary_text:'+result_providesalary_text)
                 # print('result_attribute_text:'+result_attribute_text)
+                result_time = re.findall('"updatedate":"(.*?)",', result_full_now, re.I)[0]
+                # print(result_time)
 
                 # 判断详情列表是否有学历
                 if len(result_attribute_text[1:-1].split(',')) == 2:
@@ -141,7 +180,8 @@ def getJobInfo():
                     'result_providesalary_text': result_providesalary_text,
                     'area': result_attribute_text[1:-1].split(',')[0][1:-1],
                     'experence': experence,
-                    'education': education
+                    'education': education,
+                    'result_time': result_time
                 }
                 # print(result_attribute_text)
                 # print(len(result_attribute_text[1:-1].split(',')))
@@ -232,12 +272,12 @@ def getJobInfo():
             with open('./jobdata.csv', 'a+',newline='',encoding='utf-8-sig') as csv_file:
                 csv.writer(csv_file).writerow([result_name,result_providesalary_text,job_info_dict['area'],
                                               experence,education,belongs,
-                                               keywords,category_line,category,job_detail])
+                                               keywords,category_line,category,job_detail,result_time])
 
 
             job_info_list.append(job_info_dict)
             # print('=============================')
-            print('write')
+            print(i)
             time.sleep(0.1)
             # resp_detail.close()
 
@@ -279,6 +319,6 @@ if __name__ == "__main__":
     with open('./jobdata.csv', 'a+', newline='', encoding='utf-8-sig') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(['result_name','result_providesalary_text','area','experence',
-                         'education','belongs','keywords','category_line','category','job_detail'])
+                         'education','belongs','keywords','category_line','category','job_detail','result_time'])
 
     getJobInfo()
